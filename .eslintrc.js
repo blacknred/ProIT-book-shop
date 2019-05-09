@@ -7,8 +7,8 @@ module.exports = {
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": "off",
         "no-console": "off",
+        "react/prop-types": "off",
         "react/no-children-prop": "off",
-
         "implicit-arrow-linebreak": [0, "as-beside"],
         "react/require-default-props": [0],
         "react/prefer-stateless-function": [0, { "ignorePureComponents": true }]

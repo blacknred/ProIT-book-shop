@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {
     Route,
     Switch,
@@ -17,10 +16,10 @@ export default () => (
     <BrowserRouter>
         <Suspense fallback={<Loading />}>
             <Switch>
-                <Route path="/books/" exact component={BookList} />
+                <Route path="/books" exact component={BookList} />
                 <Route path="/books/:bookdId?" exact component={Book} />
                 <Route path="/books/:bookdId?/edit" exact component={BookEdit} />
-                <Redirect to="/books/" />
+                <Redirect to="/books" />
             </Switch>
         </Suspense>
     </BrowserRouter>
