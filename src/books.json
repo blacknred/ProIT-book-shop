@@ -1,0 +1,42 @@
+[{
+    "id": 124,
+    "name": "Crime and Punishment",
+    "author": "Fyodor Dostoyevsky",
+    "pages": 451
+},
+{
+    "id": 1545,
+    "name": "The Unloved",
+    "author": "John Saul",
+    "pages": 243
+},
+{
+    "id": 234,
+    "name": "11/22/63",
+    "author": "Steven King",
+    "pages": 213
+},
+{
+    "id": 3234,
+    "name": "The Sentinel",
+    "author": "Jeremy Bishop",
+    "pages": 410
+},
+{
+    "id": 2344,
+    "name": "Jane Eyre",
+    "author": "Charlotte Bron",
+    "pages": 390
+},
+{
+    "id": 5234,
+    "name": "The Girl with the Dragon Tattoo",
+    "author": "Stieg Larsson",
+    "pages": 201
+},
+{
+    "id": 623,
+    "name": "Robison Crusoe",
+    "author": "Daniel Defoe",
+    "pages": 590
+}]

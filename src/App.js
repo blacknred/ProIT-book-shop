@@ -2,14 +2,17 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import ErrorBoundary from './containers/ErrorBoundary';
-import Notification from './components/Notification';
+import Notification from './containers/Notification';
+import Layout from './components/Layout';
 import Routes from './Routes';
 import store from './store';
 
 export default () => (
     <Provider store={store}>
         <ErrorBoundary>
-            <Routes />
+            <Layout>
+                <Routes />
+            </Layout>
             <Notification />
         </ErrorBoundary>
     </Provider>
