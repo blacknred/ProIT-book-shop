@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Button } from '@patternfly/react-core';
-import {
-    Table, TableHeader, TableBody, TableVariant, SortByDirection, sortable,
-} from '@patternfly/react-table';
+// import { Stack, StackItem, Button } from '@patternfly/react-core';
+// import {
+//     Table, TableHeader, TableBody, TableVariant, SortByDirection, sortable,
+// } from '@patternfly/react-table';
 
 import books from '../books.json';
 
@@ -12,13 +12,15 @@ class BookList extends React.Component {
         super(props);
         this.state = {
             columns: [
-                'idd',
-                { title: 'Title', transforms: [sortable] },
-                { title: 'Author', transforms: [sortable] },
-                { title: 'Pages', transforms: [sortable] },
+                // { title: 'Title', transforms: [sortable] },
+                // { title: 'Author', transforms: [sortable] },
+                // { title: 'Pages', transforms: [sortable] },
             ],
             rows: [],
-            sortBy: {},
+            sortBy: {
+                index: 1,
+                direction: 'asc',
+            },
         };
         this.onSort = this.onSort.bind(this);
         this.onRowClickHandler = this.onRowClickHandler.bind(this);
@@ -26,53 +28,55 @@ class BookList extends React.Component {
 
     componentDidMount() {
         this.setState({
-            rows: books.map(book => ({ cells: Object.values(book) })),
+            rows: books.map(book => Object.values(book).slice(1)),
         });
     }
 
     onRowClickHandler(...args) {
+        console.log(args);
         const { history } = this.props;
         history.push(`/books/${args[1].cells[0]}`);
     }
 
     onSort(e, idx, direction) {
-        const { rows } = this.state;
-        console.log(e, idx, direction);
-        const sortedRows = rows.sort((a, b) => a[idx] < b[idx] ? -1 : a[idx] > b[idx] ? 1 : 0);
-        this.setState({
-            sortBy: {
-                idx,
-                direction,
-            },
-            rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse(),
-        });
+        console.log(direction);
+        // const { rows, sortBy: { direction: prevDirection } } = this.state;
+        // const sortedRows = rows.sort((a, b) => {
+        //     if (a[idx] < b[idx]) return -1;
+        //     if (a[idx] > b[idx]) return 1;
+        //     return 0;
+        // });
+        // this.setState({
+        //     sortBy: {
+        //         idx,
+        //         direction: prevDirection === 'asc' ? 'desc' : 'asc',
+        //     },
+        //     rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse(),
+        // });
     }
 
     render() {
         const { columns, rows, sortBy } = this.state;
         return (
-            <>
-                <Button component={Link} to="/books/new">Add new book</Button>
-                <Table
-                    variant={TableVariant.compact}
-                    caption="Books list"
-                    cells={columns}
-                    rows={rows}
-                    sortBy={sortBy}
-                    onSort={this.onSort}
-                    // selected
-                    id={Date.now()}
-                // striped="true"
-                // bordered="true"
-                // hover={true}
-                // rowWrapper={RowWrapper}
-                // onCollapse={this.onCollapse}
-                // actionResolver={this.actionResolver}
-                >
-                    <TableHeader />
-                    <TableBody onRowClick={this.onRowClickHandler} />
-                </Table>
-            </>
+            <div />
+            // <Stack gutter="md">
+            //     <StackItem>
+            //         <Button component={Link} to="/books/new">Add new book</Button>
+            //     </StackItem>
+            //     <StackItem isFilled>
+            //         <Table
+            //             variant={TableVariant.compact}
+            //             caption="Books list"
+            //             cells={columns}
+            //             rows={rows}
+            //             sortBy={sortBy}
+            //             onSort={this.onSort}
+            //         >
+            //             <TableHeader />
+            //             <TableBody onRowClick={this.onRowClickHandler} />
+            //         </Table>
+            //     </StackItem>
+            // </Stack>
         );
     }
 }

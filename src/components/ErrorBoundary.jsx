@@ -1,3 +1,3 @@
 import React from 'react';
 
-export default () => <div>Error</div>;
+export default () => <h1>Error</h1>;
