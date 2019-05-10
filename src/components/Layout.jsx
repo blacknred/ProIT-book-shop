@@ -2,11 +2,8 @@ import React from 'react';
 import {
     Page,
     Brand,
-    Text,
-    TextContent,
     PageHeader,
     PageSection,
-    SkipToContent,
     PageSectionVariants,
 } from '@patternfly/react-core';
 
@@ -19,21 +16,10 @@ export default ({ children }) => {
         <PageHeader logo={<Brand src={logo} alt="Patternfly Logo" />} />
     );
 
-    const PageSkipToContent = (
-        <SkipToContent href="#main-content-page-layout-default-nav">
-            Skip to Content
-        </SkipToContent>
-    );
-
     return (
-        <Page header={Header} skipToContent={PageSkipToContent}>
+        <Page header={Header} className="container-c">
             <Notification />
-            <PageSection variant={PageSectionVariants.default}>
-                <TextContent>
-                    <Text component="h1">Books</Text>
-                </TextContent>
-            </PageSection>
-            <PageSection>
+            <PageSection className="content">
                 {children}
             </PageSection>
             <PageSection variant={PageSectionVariants.dark} className="footer" />

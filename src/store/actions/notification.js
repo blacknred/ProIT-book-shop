@@ -1,9 +1,8 @@
 import constants from '../constants/index';
 
-export const createNotification = (text, status = 'warning') => ({
+export const createNotification = notification => ({
     type: constants.CREATE_NOTIFICATION,
-    text,
-    status,
+    notification,
 });
 
 export const deleteNotification = id => ({

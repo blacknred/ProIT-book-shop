@@ -1,9 +1,10 @@
-// import * as notification from './notification';
 import { createNotification, deleteNotification } from './notification';
-
-// console.log(...notification);
+import { fetchBooks, addBook, updateBook } from './book';
 
 export default {
     createNotification,
     deleteNotification,
+    fetchBooks,
+    addBook,
+    updateBook,
 };

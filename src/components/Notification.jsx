@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { Alert, AlertActionCloseButton } from '@patternfly/react-core';
+import {
+    Alert,
+    AlertActionCloseButton,
+} from '@patternfly/react-core';
 
 import './notification.css';
 
