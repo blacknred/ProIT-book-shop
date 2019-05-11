@@ -1,16 +1,54 @@
 import constants from '../constants/index';
+import { getBook, putBook } from '../../api';
 
-export const fetchBooks = books => ({
-    type: constants.FETCH_BOOKS,
-    books,
+export const fetchBookBegin = () => ({
+    type: constants.FETCH_BOOK_BEGIN,
 });
 
-export const addBook = book => ({
-    type: constants.ADD_BOOK,
+export const fetchBookSuccess = book => ({
+    type: constants.FETCH_BOOK_SUCCESS,
     book,
 });
 
-export const updateBook = book => ({
-    type: constants.UPDATE_BOOK,
+export const fetchBookFailure = error => ({
+    type: constants.FETCH_BOOK_FAILURE,
+    error,
+});
+
+export const updateBookBegin = () => ({
+    type: constants.UPDATE_BOOK_BEGIN,
+});
+
+export const updateBookSuccess = book => ({
+    type: constants.UPDATE_BOOK_SUCCESS,
     book,
 });
+
+export const updateBookFailure = error => ({
+    type: constants.UPDATE_BOOK_FAILURE,
+    error,
+});
+
+// action creators
+
+export const fetchBook = id => (dispatch) => {
+    dispatch(fetchBookBegin());
+    return getBook(id)
+        .then((res) => {
+            dispatch(fetchBookSuccess(res));
+        })
+        .catch((e) => {
+            dispatch(fetchBookFailure(e));
+        });
+};
+
+export const updateBook = bookData => (dispatch) => {
+    dispatch(updateBookBegin());
+    return putBook(bookData)
+        .then((res) => {
+            dispatch(updateBookSuccess(res));
+        })
+        .catch((e) => {
+            dispatch(updateBookFailure(e));
+        });
+};

@@ -7,7 +7,7 @@ import {
     PageSectionVariants,
 } from '@patternfly/react-core';
 
-import Notification from '../containers/Notification';
+import Notification from './Notifications';
 import logo from '../logo.svg';
 import './layout.css';
 

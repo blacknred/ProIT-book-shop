@@ -1,18 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-    Form,
-    FormGroup,
-    TextInput,
-    ActionGroup,
-    Button,
-    Card,
-    CardHeader,
-    CardBody,
-} from '@patternfly/react-core';
 
-import { addBook, updateBook } from '../store/actions/book';
+import BookEditComponent from '../components/BookEdit';
+import { fetchBook                                   , addBook, updateBook } from '../store/actions/book';
 import { createNotification } from '../store/actions/notification';
 
 class BookEdit extends React.Component {
@@ -22,137 +13,110 @@ class BookEdit extends React.Component {
             isEdit: false,
             title: '',
             author: '',
-            pages: '',
+            pagesCount: '',
             isTitleValid: true,
-            isAuthorValid: true,
             isPagesCountValid: true,
         };
-        this.onChangeHandler = this.onChangeHandler.bind(this);
+        this.onChangeTitleHandler = this.onChangeTitleHandler.bind(this);
+        this.onChangeAuthorHandler = this.onChangeAuthorHandler.bind(this);
+        this.onChangePagesCountHandler = this.onChangePagesCountHandler.bind(this);
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
     }
 
     componentDidMount() {
-
+        const { book } = this.props;
+        if (book) {
+            this.setState({
+                isEdit: true,
+                title: book.title,
+                author: book.author,
+                pagesCount: book.pagesCount,
+            });
+        }
     }
 
-    onChangeHandler(name, value) {
+    onChangeTitleHandler(value) {
+        const { titles } = this.props;
         this.setState({
-            [name]: value,
-            [`is${name.toUpperCase()}Valid`]: /^\d+$/.test(value),
+            title: value,
+            isTitleValid: !(titles.inclides(value)),
+        });
+    }
+
+    onChangeAuthorHandler(value) {
+        this.setState({
+            author: value,
+        });
+    }
+
+    onChangePagesCountHandler(value) {
+        this.setState({
+            pagesCount: value,
+            isPagesCountValid: /^\d+$/.test(value),
         });
     }
 
     onSubmitHandler(e) {
         e.preventDefault();
-
         const {
-            history, books, add, update, notify,
+            history, book, add, update, notify, titles,
         } = this.props;
         const {
-            title, author, pages, isTitleValid, isAuthorValid, isPagesCountValid, isEdit,
+            title, author, pages, isTitleValid, isPagesCountValid, isEdit,
         } = this.state;
-        if (isTitleValid || isAuthorValid || isPagesCountValid) {
+        if (!isTitleValid || !isPagesCountValid) {
             notify({
                 text: 'Invalid book data',
                 status: 'warning',
             });
+            console.log('kk', isTitleValid, isPagesCountValid);
             return;
         }
-
-        const book = {
-            id: books.length + 1,
-            title,
-            author,
-            pages,
-        };
-
-        if (isEdit) update(book);
-        else add(book);
-
-        history.push(`/books/${book.id}`);
+        const id = book ? book.id : titles.length + 1;
+        if (isEdit) {
+            update({
+                ...book,
+                title,
+                author,
+                pages,
+            });
+        } else {
+            add({
+                id,
+                title,
+                author,
+                pages,
+            });
+        }
+        history.push(`/books/${id}`);
+        notify({
+            text: isEdit ? 'Book data has been updated' : 'New book has been added',
+            status: 'success',
+        });
     }
 
     render() {
         const { history } = this.props;
-        const {
-            title, author, pages, isTitleValid, isAuthorValid, isPagesCountValid, isEdit,
-        } = this.state;
         return (
-            <Card>
-                <CardHeader>
-                    {`${isEdit ? 'Edit' : 'Add'} book data`}
-                </CardHeader>
-                <CardBody>
-                    <Form isHorizontal onSubmit={this.onSubmitHandler}>
-                        <FormGroup
-                            label="Book title"
-                            // isRequired
-                            fieldId="title"
-                            helperTextInvalid="Please provide book title"
-                            isValid={isTitleValid}
-                        >
-                            <TextInput
-                                isRequired
-                                type="text"
-                                id="title"
-                                name="title"
-                                aria-describedby="title"
-                                value={title}
-                                onChange={val => this.onChangeHandler('title', val)}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label="Book author"
-                            // isRequired
-                            fieldId="author"
-                            helperTextInvalid="Please provide book title"
-                            isValid={isAuthorValid}
-                        >
-                            <TextInput
-                                isRequired
-                                type="text"
-                                id="author"
-                                name="author"
-                                aria-describedby="author"
-                                value={author}
-                                onChange={val => this.onChangeHandler('author', val)}
-                            />
-                        </FormGroup>
-                        <FormGroup
-                            label="Pages count"
-                            // isRequired
-                            fieldId="pagesCount"
-                            helperTextInvalid="Please provide book pages count"
-                            isValid={isPagesCountValid}
-                        >
-                            <TextInput
-                                isRequired
-                                type="number"
-                                id="simple-form-number"
-                                placeholder="0"
-                                name="pagesCount"
-                                aria-describedby="pagesCount"
-                                value={pages}
-                                onChange={val => this.onChangeHandler('pagesCount', val)}
-                            />
-                        </FormGroup>
-                        <ActionGroup>
-                            <Button variant="primary" type="submit">Save</Button>
-                            <Button variant="secondary" onClick={() => history.goBack()}>Cancel</Button>
-                        </ActionGroup>
-                    </Form>
-                </CardBody>
-            </Card>
-
+            <BookEditComponent
+                {...this.state}
+                onChangeTitle={this.onChangeTitleHandler}
+                onChangeAuthor={this.onChangeAuthorHandler}
+                onChangePagesCount={this.onChangePagesCountHandler}
+                onSubmit={this.onSubmitHandler}
+                onBack={() => history.goBack()}
+            />
         );
     }
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    book: state.books,
+    book: state.books.find(book => book.id === ownProps.match.bookId),
+    titles: state.books.map(book => book.title),
 });
 
 const mapDispatchToProps = dispatch => ({
+    fetcher: id => dispatch(fetchBook(id)),
     add: book => dispatch(addBook(book)),
     update: book => dispatch(updateBook(book)),
     notify: notification => dispatch(createNotification(notification)),

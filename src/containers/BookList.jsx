@@ -1,28 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
-import {
-    Stack,
-    StackItem,
-    Button,
-    Card,
-    CardHeader,
-    CardBody,
-} from '@patternfly/react-core';
-import {
-    Table,
-    TableHeader,
-    TableBody,
-    sortable,
-    SortByDirection,
-    headerCol,
-    TableVariant,
-    expandable,
-    cellWidth
-} from '@patternfly/react-table';
+import { withRouter } from 'react-router-dom';
+import { sortable, SortByDirection } from '@patternfly/react-table';
 
+import BookListComponent from '../components/BookList';
 import { fetchBooks } from '../store/actions/book';
-import bookData from '../books.json';
 
 class BookList extends React.Component {
     constructor(props) {
@@ -34,32 +16,27 @@ class BookList extends React.Component {
                 { title: 'Author', transforms: [sortable] },
                 'Pages',
             ],
+            rows: [],
             sortBy: {
                 index: 1,
                 direction: 'asc',
             },
         };
         this.onSort = this.onSort.bind(this);
-        this.onFetch = this.onFetch.bind(this);
         this.onRowClickHandler = this.onRowClickHandler.bind(this);
     }
 
     componentWillMount() {
-        const { fetcher } = this.props;
-        const onFetch = new Promise((resolve) => {
-            setTimeout(() => resolve(bookData.map(book => Object.values(book)), 2000));
-        });
-        fetcher(onFetch);
+        const { books } = this.props;
+        this.setState({ rows: books.map(book => Object.values(book)) });
     }
 
-    onRowClickHandler(...args) {
-        console.log(args);
+    onRowClickHandler(_, arg) {
         const { history } = this.props;
-        history.push(`/books/${args[1][0]}`);
+        history.push(`/books/${arg[0]}`);
     }
 
     onSort(_e, idx, direction) {
-        console.log(direction);
         const { books } = this.props;
         const sortedRows = books.sort((a, b) => {
             if (a[idx] < b[idx]) return -1;
@@ -76,40 +53,17 @@ class BookList extends React.Component {
     }
 
     render() {
-        const { books } = this.props;
-        const { columns, sortBy } = this.state;
         return (
-            <Card>
-                <CardHeader>
-                    Books
-                </CardHeader>
-                <CardBody>
-                    <Stack gutter="md">
-                        <StackItem>
-                            <Button component={Link} to="/books/new">Add new book</Button>
-                        </StackItem>
-                        <StackItem isFilled>
-                            <Table
-                                // variant={TableVariant.compact}
-                                caption="Books list"
-                                cells={columns}
-                                rows={books}
-                                sortBy={sortBy}
-                                onSort={this.onSort}
-                            >
-                                <TableHeader />
-                                <TableBody onRowClick={this.onRowClickHandler} />
-                            </Table>
-                        </StackItem>
-                    </Stack>
-                </CardBody>
-            </Card>
-
+            <BookListComponent
+                {...this.state}
+                onRowClick={this.onRowClickHandler}
+                onSort={this.onSort}
+            />
         );
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = state => ({
     books: state.books,
 });
 
