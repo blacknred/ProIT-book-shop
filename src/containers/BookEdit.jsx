@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import BookEditComponent from '../components/BookEdit';
-import { fetchBook                                   , addBook, updateBook } from '../store/actions/book';
+import { fetchBook, updateBook } from '../store/actions/book';
+import { addBook } from '../store/actions/books';
 import { createNotification } from '../store/actions/notification';
 
 class BookEdit extends React.Component {

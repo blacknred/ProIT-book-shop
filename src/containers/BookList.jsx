@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { sortable, SortByDirection } from '@patternfly/react-table';
 
+import Loading from '../components/Loader';
 import BookListComponent from '../components/BookList';
-import { fetchBooks } from '../store/actions/book';
+import { fetchBooks } from '../store/actions/books';
 
 class BookList extends React.Component {
     constructor(props) {
@@ -26,9 +27,10 @@ class BookList extends React.Component {
         this.onRowClickHandler = this.onRowClickHandler.bind(this);
     }
 
-    componentWillMount() {
-        const { books } = this.props;
-        this.setState({ rows: books.map(book => Object.values(book)) });
+    componentDidMount() {
+        const { fetching } = this.props;
+        fetching();
+        // this.setState({ rows: books.map(book => Object.values(book)) });
     }
 
     onRowClickHandler(_, arg) {
@@ -53,9 +55,17 @@ class BookList extends React.Component {
     }
 
     render() {
+        const { error, loading, books } = this.props;
+        if (loading) {
+            return <Loading />;
+        }
+        if (error) {
+            return 'error';
+        }
         return (
             <BookListComponent
                 {...this.state}
+                rows={books.map(book => Object.values(book))}
                 onRowClick={this.onRowClickHandler}
                 onSort={this.onSort}
             />
@@ -64,11 +74,13 @@ class BookList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    books: state.books,
+    books: state.books.books,
+    loading: state.books.loading,
+    error: state.books.error,
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetcher: books => dispatch(fetchBooks(books)),
+    fetching: () => dispatch(fetchBooks()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BookList));

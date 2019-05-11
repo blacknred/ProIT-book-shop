@@ -16,7 +16,7 @@ import {
 
 export default ({
     columns, sortBy, rows, onSort, onRowClick,
-}) => (    
+}) => (
     <Card>
         <CardHeader>
             Books
@@ -31,8 +31,8 @@ export default ({
                         caption="Books list"
                         cells={columns}
                         rows={rows}
-                        sortBy={sortBy}
-                        onSort={onSort}
+                        // sortBy={sortBy}
+                        // onSort={onSort}
                     >
                         <TableHeader />
                         <TableBody onRowClick={onRowClick} />

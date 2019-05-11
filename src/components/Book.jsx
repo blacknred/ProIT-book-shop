@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     Text,
     Card,
@@ -11,40 +10,54 @@ import {
     ActionGroup,
     TextContent,
     TextVariants,
+    Split,
+    SplitItem,
 } from '@patternfly/react-core';
 
-const Book = ({ match: { bookId }, book }) => (
+export default ({ book }) => (
     <Card>
-        <CardHeader>
-            <TextContent>
-                <Text component={TextVariants.h1}>{book.title}</Text>
-            </TextContent>
-        </CardHeader>
-        <CardBody>
-            <TextContent>
-                <Text component={TextVariants.h1}>{book.author}</Text>
-            </TextContent>
-        </CardBody>
-        <CardBody>
-            <TextContent>
-                <Text component={TextVariants.h1}>{book.pages}</Text>
-            </TextContent>
-        </CardBody>
-        <CardFooter>
-            <ActionGroup>
-                <Button variant="primary" component={Link} to="/books">
-                    Back to list
-                </Button>
-                <Button variant="secondary" component={Link} to={`/books/${bookId}/edit`}>
-                    Edit
-                </Button>
-            </ActionGroup>
-        </CardFooter>
+        {!book ? (
+            <CardBody>
+                <TextContent>
+                    <Text component={TextVariants.h1}>Not found</Text>
+                </TextContent>
+            </CardBody>
+        ) : (
+            <>
+                <CardHeader>
+                    <TextContent>
+                        <Text component={TextVariants.h1}>{book.title}</Text>
+                    </TextContent>
+                </CardHeader>
+                <CardBody>
+                    <TextContent>
+                        <Text component={TextVariants.h1}>{book.author}</Text>
+                    </TextContent>
+                </CardBody>
+                <CardBody>
+                    <TextContent>
+                        <Text component={TextVariants.h1}>{book.pages}</Text>
+                    </TextContent>
+                </CardBody>
+                <CardFooter>
+                    <ActionGroup>
+                        <Split gutter="md">
+                            <SplitItem>
+                                <Button variant="primary" component={Link} to="/books">
+                                    Back to list
+                                </Button>
+                            </SplitItem>
+                            <SplitItem>
+                                <Button variant="secondary" component={Link} to={`/books/${book.id}/edit`}>
+                                    Edit
+                                </Button>
+                            </SplitItem>
+                        </Split>
+
+
+                    </ActionGroup>
+                </CardFooter>
+            </>
+            )}
     </Card>
 );
-
-const mapStateToProps = (state, ownProps) => ({
-    book: state.books.find(book => book.id === ownProps.match.bookId),
-});
-
-export default withRouter(connect(mapStateToProps)(Book));
