@@ -67,7 +67,7 @@ class BookEdit extends React.Component {
             history, book, add, update, notify, titles,
         } = this.props;
         const {
-            title, author, pages, isTitleValid, isPagesCountValid, isEdit,
+            title, author, pagesCount, isTitleValid, isPagesCountValid, isEdit,
         } = this.state;
         if (!isTitleValid || !isPagesCountValid) {
             // notify({
@@ -77,20 +77,20 @@ class BookEdit extends React.Component {
             console.log('kk', isTitleValid, isPagesCountValid);
             return;
         }
-        const id = book ? book.id : titles.length + 1;
+        const id = Date.now(); // book ? book.id :
         if (isEdit) {
             update({
                 ...book,
                 title,
                 author,
-                pages,
+                pagesCount,
             });
         } else {
             add({
                 id,
                 title,
                 author,
-                pages,
+                pagesCount,
             });
         }
         history.push(`/books/${id}`);

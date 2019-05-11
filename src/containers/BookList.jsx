@@ -15,7 +15,7 @@ class BookList extends React.Component {
                 '#',
                 { title: 'Title', transforms: [sortable] },
                 { title: 'Author', transforms: [sortable] },
-                'Pages',
+                'PagesCount',
             ],
             rows: [],
             sortBy: {},

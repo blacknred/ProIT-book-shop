@@ -17,11 +17,18 @@ import {
 export default ({ book }) => (
     <Card>
         {!book ? (
-            <CardBody>
-                <TextContent>
-                    <Text component={TextVariants.h3}>Not found</Text>
-                </TextContent>
-            </CardBody>
+            <>
+                <CardBody>
+                    <TextContent>
+                        <Text component={TextVariants.h3}>Not found</Text>
+                    </TextContent>
+                </CardBody>
+                <CardBody>
+                    <Button variant="secondary" component={Link} to="/books">
+                        Back to list
+                    </Button>
+                </CardBody>
+            </>
         ) : (
             <>
                 <CardHeader>About the book</CardHeader>
@@ -37,7 +44,7 @@ export default ({ book }) => (
                 </CardBody>
                 <CardBody>
                     <TextContent>
-                        <Text component={TextVariants.h1}>{book.pages}</Text>
+                        <Text component={TextVariants.h1}>{book.pagesCount}</Text>
                     </TextContent>
                 </CardBody>
                 <CardFooter>
