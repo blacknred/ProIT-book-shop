@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Loading from '../components/Loader';
+import Notification from '../components/Notification';
 import BookComponent from '../components/Book';
 import { fetchBook } from '../store/actions/book';
 
@@ -14,12 +15,11 @@ class Book extends React.Component {
 
     render() {
         const { error, loading, book } = this.props;
-        console.log(error, loading, book);
         if (loading) {
             return <Loading />;
         }
         if (error) {
-            return 'error';
+            return <Notification text={error.message} variant="danger" />;
         }
         return (
             <BookComponent book={book} />

@@ -5,9 +5,9 @@ export const fetchBooksBegin = () => ({
     type: constants.FETCH_BOOKS_BEGIN,
 });
 
-export const fetchBooksSuccess = book => ({
+export const fetchBooksSuccess = books => ({
     type: constants.FETCH_BOOKS_SUCCESS,
-    book,
+    books,
 });
 
 export const fetchBooksFailure = error => ({
@@ -36,6 +36,7 @@ export const fetchBooks = () => (dispatch) => {
     return getBooks()
         .then((res) => {
             dispatch(fetchBooksSuccess(res));
+            return res;
         })
         .catch((e) => {
             dispatch(fetchBooksFailure(e));
@@ -47,6 +48,7 @@ export const addBook = bookData => (dispatch) => {
     return postBook(bookData)
         .then((res) => {
             dispatch(addBookSuccess(res));
+            return res;
         })
         .catch((e) => {
             dispatch(addBookFailure(e));

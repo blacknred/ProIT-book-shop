@@ -18,9 +18,7 @@ export default ({
     columns, sortBy, rows, onSort, onRowClick,
 }) => (
     <Card>
-        <CardHeader>
-            Books
-        </CardHeader>
+        <CardHeader>Books</CardHeader>
         <CardBody>
             <Stack gutter="md">
                 <StackItem>
@@ -31,8 +29,8 @@ export default ({
                         caption="Books list"
                         cells={columns}
                         rows={rows}
-                        // sortBy={sortBy}
-                        // onSort={onSort}
+                        sortBy={sortBy}
+                        onSort={onSort}
                     >
                         <TableHeader />
                         <TableBody onRowClick={onRowClick} />

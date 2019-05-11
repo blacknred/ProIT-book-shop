@@ -19,16 +19,17 @@ export default ({ book }) => (
         {!book ? (
             <CardBody>
                 <TextContent>
-                    <Text component={TextVariants.h1}>Not found</Text>
+                    <Text component={TextVariants.h3}>Not found</Text>
                 </TextContent>
             </CardBody>
         ) : (
             <>
-                <CardHeader>
+                <CardHeader>About the book</CardHeader>
+                <CardBody>
                     <TextContent>
                         <Text component={TextVariants.h1}>{book.title}</Text>
                     </TextContent>
-                </CardHeader>
+                </CardBody>
                 <CardBody>
                     <TextContent>
                         <Text component={TextVariants.h1}>{book.author}</Text>
@@ -58,6 +59,6 @@ export default ({ book }) => (
                     </ActionGroup>
                 </CardFooter>
             </>
-            )}
+        )}
     </Card>
 );

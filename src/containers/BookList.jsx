@@ -18,10 +18,7 @@ class BookList extends React.Component {
                 'Pages',
             ],
             rows: [],
-            sortBy: {
-                index: 1,
-                direction: 'asc',
-            },
+            sortBy: {},
         };
         this.onSort = this.onSort.bind(this);
         this.onRowClickHandler = this.onRowClickHandler.bind(this);
@@ -30,7 +27,12 @@ class BookList extends React.Component {
     componentDidMount() {
         const { fetching } = this.props;
         fetching();
-        // this.setState({ rows: books.map(book => Object.values(book)) });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            rows: nextProps.books.map(book => Object.values(book)),
+        });
     }
 
     onRowClickHandler(_, arg) {
@@ -38,7 +40,7 @@ class BookList extends React.Component {
         history.push(`/books/${arg[0]}`);
     }
 
-    onSort(_e, idx, direction) {
+    onSort(_e, idx, dir) {
         const { books } = this.props;
         const sortedRows = books.sort((a, b) => {
             if (a[idx] < b[idx]) return -1;
@@ -47,15 +49,15 @@ class BookList extends React.Component {
         });
         this.setState({
             sortBy: {
-                idx,
-                direction,
+                index: idx,
+                direction: dir,
             },
-            rows: direction === SortByDirection.asc ? sortedRows : sortedRows.reverse(),
+            rows: dir === SortByDirection.asc ? sortedRows : sortedRows.reverse(),
         });
     }
 
     render() {
-        const { error, loading, books } = this.props;
+        const { error, loading } = this.props;
         if (loading) {
             return <Loading />;
         }
@@ -65,7 +67,7 @@ class BookList extends React.Component {
         return (
             <BookListComponent
                 {...this.state}
-                rows={books.map(book => Object.values(book))}
+                // rows={books.map(book => Object.values(book))}
                 onRowClick={this.onRowClickHandler}
                 onSort={this.onSort}
             />

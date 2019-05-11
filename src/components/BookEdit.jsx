@@ -16,7 +16,7 @@ export default ({
 }) => (
     <Card>
         <CardHeader>
-            {`${isEdit ? 'Edit' : 'Add'} book data`}
+            {`${isEdit ? 'Edit' : 'Add'} a book data`}
         </CardHeader>
         <CardBody>
             <Form isHorizontal>

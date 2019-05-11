@@ -2,10 +2,11 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import Loading from '../components/Loader';
+import Notification from '../components/Notification';
 import BookEditComponent from '../components/BookEdit';
 import { fetchBook, updateBook } from '../store/actions/book';
 import { addBook } from '../store/actions/books';
-import { createNotification } from '../store/actions/notification';
 
 class BookEdit extends React.Component {
     constructor(props) {
@@ -15,8 +16,8 @@ class BookEdit extends React.Component {
             title: '',
             author: '',
             pagesCount: '',
-            isTitleValid: true,
-            isPagesCountValid: true,
+            isTitleValid: false,
+            isPagesCountValid: false,
         };
         this.onChangeTitleHandler = this.onChangeTitleHandler.bind(this);
         this.onChangeAuthorHandler = this.onChangeAuthorHandler.bind(this);
@@ -25,22 +26,25 @@ class BookEdit extends React.Component {
     }
 
     componentDidMount() {
-        const { book } = this.props;
-        if (book) {
-            this.setState({
-                isEdit: true,
-                title: book.title,
-                author: book.author,
-                pagesCount: book.pagesCount,
-            });
-        }
+        const { match: { params: { bookId } }, fetching } = this.props;
+        if (bookId) fetching(bookId);
+    }
+
+    componentWillReceiveProps({ book }) {
+        console.log(book);
+        this.setState({
+            isEdit: true,
+            title: book.title,
+            author: book.author,
+            pagesCount: book.pagesCount,
+        });
     }
 
     onChangeTitleHandler(value) {
         const { titles } = this.props;
         this.setState({
             title: value,
-            isTitleValid: !(titles.inclides(value)),
+            isTitleValid: true, // !(titles.inclides(value)),
         });
     }
 
@@ -66,10 +70,10 @@ class BookEdit extends React.Component {
             title, author, pages, isTitleValid, isPagesCountValid, isEdit,
         } = this.state;
         if (!isTitleValid || !isPagesCountValid) {
-            notify({
-                text: 'Invalid book data',
-                status: 'warning',
-            });
+            // notify({
+            //     text: 'Invalid book data',
+            //     status: 'warning',
+            // });
             console.log('kk', isTitleValid, isPagesCountValid);
             return;
         }
@@ -90,14 +94,22 @@ class BookEdit extends React.Component {
             });
         }
         history.push(`/books/${id}`);
-        notify({
-            text: isEdit ? 'Book data has been updated' : 'New book has been added',
-            status: 'success',
-        });
+        // notify({
+        //     text: isEdit ? 'Book data has been updated' : 'New book has been added',
+        //     status: 'success',
+        // });
     }
 
     render() {
-        const { history } = this.props;
+        const {
+            history, error, book, loading,
+        } = this.props;
+        if (loading) {
+            return <Loading />;
+        }
+        if (error) {
+            return <Notification text={error.message} variant="danger" />;
+        }
         return (
             <BookEditComponent
                 {...this.state}
@@ -111,16 +123,16 @@ class BookEdit extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-    book: state.books.find(book => book.id === ownProps.match.bookId),
-    titles: state.books.map(book => book.title),
+const mapStateToProps = state => ({
+    book: state.book.book,
+    // titles: state.books.map(book => book.title),
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetcher: id => dispatch(fetchBook(id)),
+    fetching: id => dispatch(fetchBook(id)),
     add: book => dispatch(addBook(book)),
     update: book => dispatch(updateBook(book)),
-    notify: notification => dispatch(createNotification(notification)),
+    // notify: notification => dispatch(createNotification(notification)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BookEdit));

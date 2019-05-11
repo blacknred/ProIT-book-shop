@@ -7,9 +7,7 @@ import {
     PageSectionVariants,
 } from '@patternfly/react-core';
 
-import Notification from './Notifications';
 import logo from '../logo.svg';
-import './layout.css';
 
 export default ({ children }) => {
     const Header = (
@@ -17,8 +15,7 @@ export default ({ children }) => {
     );
 
     return (
-        <Page header={Header} className="container-c">
-            <Notification />
+        <Page header={Header} className="layout">
             <PageSection className="content">
                 {children}
             </PageSection>
