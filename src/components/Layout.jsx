@@ -7,16 +7,17 @@ import {
     PageSectionVariants,
 } from '@patternfly/react-core';
 
-import logo from '../logo.svg';
+import Notification from '../components/Notification';
 
 export default ({ children }) => {
     const Header = (
-        <PageHeader logo={<Brand src={logo} alt="Patternfly Logo" />} />
+        <PageHeader logo={<Brand src={null} alt="BOOKSHOP" />} />
     );
 
     return (
         <Page header={Header} className="layout">
             <PageSection className="content">
+                <Notification />
                 {children}
             </PageSection>
             <PageSection variant={PageSectionVariants.dark} className="footer" />

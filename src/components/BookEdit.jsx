@@ -70,8 +70,8 @@ export default ({
                     />
                 </FormGroup>
                 <ActionGroup>
-                    <Button variant="primary" onClick={onSubmit}>Save</Button>
                     <Button variant="secondary" onClick={onBack}>Cancel</Button>
+                    <Button variant="primary" onClick={onSubmit}>Save</Button>
                 </ActionGroup>
             </Form>
         </CardBody>

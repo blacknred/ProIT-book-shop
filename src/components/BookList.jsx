@@ -28,7 +28,7 @@ export default ({
                     <Table
                         caption="Books list"
                         cells={columns}
-                        rows={rows}
+                        rows={rows.map(row => row.concat(<><Button variant="secondary">Show</Button></>))}
                         sortBy={sortBy}
                         onSort={onSort}
                     >

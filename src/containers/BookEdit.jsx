@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Loading from '../components/Loader';
-import Notification from '../components/Notification';
 import BookEditComponent from '../components/BookEdit';
 import { fetchBook, updateBook } from '../store/actions/book';
 import { addBook } from '../store/actions/books';
@@ -66,7 +65,7 @@ class BookEdit extends React.Component {
     onSubmitHandler(e) {
         e.preventDefault();
         const {
-            history, book, add, update, notify,
+            history, book, add, update,
         } = this.props;
         const {
             title, author, pagesCount, isTitleValid, isPagesCountValid, isEdit,
@@ -93,22 +92,13 @@ class BookEdit extends React.Component {
             });
         }
         history.push(`/books/${id}`);
-        // notify({
-        //     text: isEdit ? 'Book data has been updated' : 'New book has been added',
-        //     status: 'success',
-        // });
     }
 
     render() {
-        const {
-            history, error, book, loading,
-        } = this.props;
-        const { isValidationError } = this.state;
+        const { history, loading } = this.props;
+        // const { isValidationError } = this.state;
         if (loading) {
             return <Loading />;
-        }
-        if (error) {
-            return <Notification text={error.message} variant="danger" />;
         }
         return (
             <>
@@ -120,7 +110,7 @@ class BookEdit extends React.Component {
                     onSubmit={this.onSubmitHandler}
                     onBack={() => history.goBack()}
                 />
-                {isValidationError && <Notification text="Validation Errors" variant="danger" />}
+                {/* {isValidationError && <Notification text="Validation Errors" variant="danger" />} */}
             </>
         );
     }

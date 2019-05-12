@@ -35,9 +35,11 @@ export const fetchBooks = () => (dispatch) => {
     dispatch(fetchBooksBegin());
     return getBooks()
         .then((res) => {
+            // dispatch notification
             dispatch(fetchBooksSuccess(res));
         })
         .catch((e) => {
+            // dispatch notification
             dispatch(fetchBooksFailure(e));
         });
 };
@@ -46,9 +48,11 @@ export const addBook = bookData => (dispatch) => {
     dispatch(addBookBegin());
     return postBook(bookData)
         .then((res) => {
+            // dispatch notification
             dispatch(addBookSuccess(res));
         })
         .catch((e) => {
+            // dispatch notification
             dispatch(addBookFailure(e));
         });
 };

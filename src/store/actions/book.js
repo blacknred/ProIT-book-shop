@@ -35,10 +35,12 @@ export const fetchBook = id => (dispatch) => {
     dispatch(fetchBookBegin());
     return getBook(id)
         .then((res) => {
+            // dispatch notification
             dispatch(fetchBookSuccess(res));
         })
         .catch((e) => {
-            dispatch(fetchBookFailure(e));
+            // dispatch notification
+            dispatch(fetchBookFailure(e.message));
         });
 };
 
@@ -46,9 +48,11 @@ export const updateBook = bookData => (dispatch) => {
     dispatch(updateBookBegin());
     return putBook(bookData)
         .then((res) => {
+            // dispatch notification
             dispatch(updateBookSuccess(res));
         })
         .catch((e) => {
-            dispatch(updateBookFailure(e));
+            // dispatch notification
+            dispatch(updateBookFailure(e.message));
         });
 };
