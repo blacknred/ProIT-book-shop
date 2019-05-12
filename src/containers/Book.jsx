@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Loading from '../components/Loader';
-import NotFoundComponent from '../components/NotFound';
 import BookComponent from '../components/Book';
+import NotFoundComponent from '../components/Failure';
 import { fetchBook } from '../store/actions/book';
 
 class Book extends React.Component {

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { sortable, SortByDirection } from '@patternfly/react-table';
 
 import Loading from '../components/Loader';
+import FailureComponent from '../components/Failure';
 import BookListComponent from '../components/BookList';
 import { fetchBooks } from '../store/actions/books';
 
@@ -63,7 +64,7 @@ class BookList extends React.Component {
             return <Loading />;
         }
         if (error) {
-            return 'error';
+            return <FailureComponent text={error} />;
         }
         return (
             <BookListComponent

@@ -19,7 +19,7 @@ export const getBook = id => new Promise((resolve, reject) => setTimeout(() => {
         return reject(new Error('Book not found'));
     }
     return resolve(book);
-}, 1000));
+}, 500));
 
 export const postBook = book => new Promise((resolve, reject) => setTimeout(() => {
     checkDb();

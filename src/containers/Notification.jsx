@@ -10,7 +10,7 @@ class Notification extends React.Component {
         this.timeout = null;
     }
 
-    componentDidUpdate() {
+    componentWillReceiveProps() {
         const { dispatch } = this.props;
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => dispatch(hideNotification()), 2000);

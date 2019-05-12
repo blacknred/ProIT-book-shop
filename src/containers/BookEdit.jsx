@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Loading from '../components/Loader';
 import BookEditComponent from '../components/BookEdit';
+import FailureComponent from '../components/Failure';
 import { addBook } from '../store/actions/books';
 import { fetchBook, updateBook } from '../store/actions/book';
 import { showNotification } from '../store/actions/notification';
@@ -25,15 +26,16 @@ class BookEdit extends React.Component {
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const { match: { params: { bookId } }, fetching } = this.props;
-        if (bookId) fetching(bookId);
+        if (bookId) {
+            this.setState({ isEdit: true });
+            await fetching(bookId);
+        }
     }
 
     componentWillReceiveProps({ book }) {
-        console.log(book);
         this.setState({
-            isEdit: true,
             title: book.title,
             author: book.author,
             pagesCount: book.pagesCount,
@@ -62,7 +64,7 @@ class BookEdit extends React.Component {
         });
     }
 
-    onSubmitHandler(e) {
+    async onSubmitHandler(e) {
         e.preventDefault();
         const {
             history, book, add, update, notify,
@@ -73,7 +75,7 @@ class BookEdit extends React.Component {
         if (!isTitleValid || !isPagesCountValid) {
             notify({
                 text: !isTitleValid
-                    ? 'Title have to have only letters and spaces'
+                    ? 'Title has to have letters and spaces'
                     : 'Pages count have to be an integer',
                 variant: 'danger',
             });
@@ -81,34 +83,37 @@ class BookEdit extends React.Component {
         }
         const id = isEdit ? book.id : Date.now();
         if (isEdit) {
-            update({
+            await update({
                 ...book,
                 title,
                 author,
                 pagesCount,
             });
         } else {
-            add({
+            await add({
                 id,
                 title,
                 author,
                 pagesCount,
             });
         }
-        this.setState({
-            title: '',
-            author: '',
-            pagesCount: '',
-            isTitleValid: false,
-            isPagesCountValid: false,
-        });
-        setTimeout(() => history.push(`/books/${id}`), 1000);
+        // this.setState({
+        //     title: '',
+        //     author: '',
+        //     pagesCount: '',
+        //     isTitleValid: false,
+        //     isPagesCountValid: false,
+        // });
+        // history.push(`/books/${id}`);
     }
 
     render() {
-        const { history, loading } = this.props;
+        const { history, loading, error } = this.props;
         if (loading) {
             return <Loading />;
+        }
+        if (error) {
+            return <FailureComponent text={error} />;
         }
         return (
             <BookEditComponent

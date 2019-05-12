@@ -44,7 +44,7 @@ export const fetchBooks = () => (dispatch) => {
         })
         .catch((e) => {
             dispatch(showNotification({
-                text: 'error fetching',
+                text: e.message,
                 variant: 'danger',
             }));
             dispatch(fetchBooksFailure(e));
@@ -63,7 +63,7 @@ export const addBook = bookData => (dispatch) => {
         })
         .catch((e) => {
             dispatch(showNotification({
-                text: 'error adding',
+                text: e.message,
                 variant: 'danger',
             }));
             dispatch(addBookFailure(e));
