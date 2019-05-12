@@ -7,6 +7,6 @@ export default ({ notification, onClose }) => (
         variant={notification.variant || 'warning'}
         title={notification.text || 'Warning alert description'}
         action={<AlertActionCloseButton onClose={onClose} />}
-        className="container"
+        className="notification"
     />
 );

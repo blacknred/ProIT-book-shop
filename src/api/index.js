@@ -29,7 +29,7 @@ export const postBook = book => new Promise((resolve, reject) => setTimeout(() =
     }
     localStorage.setItem('books', JSON.stringify(books.concat(book)));
     return resolve(book);
-}, 1000));
+}, 500));
 
 export const putBook = book => new Promise(resolve => setTimeout(() => {
     checkDb();
@@ -40,4 +40,4 @@ export const putBook = book => new Promise(resolve => setTimeout(() => {
     });
     localStorage.setItem('books', JSON.stringify(updatedBooks));
     return resolve(book);
-}, 1000));
+}, 500));

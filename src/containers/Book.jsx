@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Loading from '../components/Loader';
-import NotFound from '../components/NotFound';
+import NotFoundComponent from '../components/NotFound';
 import BookComponent from '../components/Book';
 import { fetchBook } from '../store/actions/book';
 
 class Book extends React.Component {
     componentDidMount() {
-        const { match: { params: { bookId } }, fetching } = this.props;
-        fetching(bookId);
+        const { match: { params: { bookId } }, dispatch } = this.props;
+        dispatch(fetchBook(bookId));
     }
 
     render() {
         const { error, book } = this.props;
         if (error) {
-            return <NotFound text={error} />;
+            return <NotFoundComponent text={error} />;
         }
         if (book) {
             return <BookComponent book={book} />;
@@ -31,8 +31,4 @@ const mapStateToProps = state => ({
     error: state.book.error,
 });
 
-const mapDispatchToProps = dispatch => ({
-    fetching: id => dispatch(fetchBook(id)),
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Book));
+export default withRouter(connect(mapStateToProps)(Book));

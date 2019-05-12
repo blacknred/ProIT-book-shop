@@ -23,3 +23,10 @@ code {
 .footer {
   max-height: 70px;
 }
+
+.notification {
+  position: absolute;
+  right: 2%;
+  top: 4%;
+  min-width: 30%;
+}

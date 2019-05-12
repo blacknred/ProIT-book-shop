@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 
 import Loading from '../components/Loader';
 import BookEditComponent from '../components/BookEdit';
-import { fetchBook, updateBook } from '../store/actions/book';
 import { addBook } from '../store/actions/books';
+import { fetchBook, updateBook } from '../store/actions/book';
+import { showNotification } from '../store/actions/notification';
 
 class BookEdit extends React.Component {
     constructor(props) {
@@ -17,7 +18,6 @@ class BookEdit extends React.Component {
             pagesCount: '',
             isTitleValid: false,
             isPagesCountValid: false,
-            isValidationError: false,
         };
         this.onChangeTitleHandler = this.onChangeTitleHandler.bind(this);
         this.onChangeAuthorHandler = this.onChangeAuthorHandler.bind(this);
@@ -45,7 +45,7 @@ class BookEdit extends React.Component {
     onChangeTitleHandler(value) {
         this.setState({
             title: value,
-            isTitleValid: true, // !(titles.inclides(value)),
+            isTitleValid: /^[a-zA-Z\s]*$/.test(value),
         });
     }
 
@@ -65,14 +65,18 @@ class BookEdit extends React.Component {
     onSubmitHandler(e) {
         e.preventDefault();
         const {
-            history, book, add, update,
+            history, book, add, update, notify,
         } = this.props;
         const {
             title, author, pagesCount, isTitleValid, isPagesCountValid, isEdit,
         } = this.state;
         if (!isTitleValid || !isPagesCountValid) {
-            this.setState({ isValidationError: true });
-            console.log('kk', isTitleValid, isPagesCountValid);
+            notify({
+                text: !isTitleValid
+                    ? 'Title have to have only letters and spaces'
+                    : 'Pages count have to be an integer',
+                variant: 'danger',
+            });
             return;
         }
         const id = isEdit ? book.id : Date.now();
@@ -91,27 +95,30 @@ class BookEdit extends React.Component {
                 pagesCount,
             });
         }
-        history.push(`/books/${id}`);
+        this.setState({
+            title: '',
+            author: '',
+            pagesCount: '',
+            isTitleValid: false,
+            isPagesCountValid: false,
+        });
+        setTimeout(() => history.push(`/books/${id}`), 1000);
     }
 
     render() {
         const { history, loading } = this.props;
-        // const { isValidationError } = this.state;
         if (loading) {
             return <Loading />;
         }
         return (
-            <>
-                <BookEditComponent
-                    {...this.state}
-                    onChangeTitle={this.onChangeTitleHandler}
-                    onChangeAuthor={this.onChangeAuthorHandler}
-                    onChangePagesCount={this.onChangePagesCountHandler}
-                    onSubmit={this.onSubmitHandler}
-                    onBack={() => history.goBack()}
-                />
-                {/* {isValidationError && <Notification text="Validation Errors" variant="danger" />} */}
-            </>
+            <BookEditComponent
+                {...this.state}
+                onChangeTitle={this.onChangeTitleHandler}
+                onChangeAuthor={this.onChangeAuthorHandler}
+                onChangePagesCount={this.onChangePagesCountHandler}
+                onSubmit={this.onSubmitHandler}
+                onBack={() => history.goBack()}
+            />
         );
     }
 }
@@ -124,7 +131,7 @@ const mapDispatchToProps = dispatch => ({
     fetching: id => dispatch(fetchBook(id)),
     add: book => dispatch(addBook(book)),
     update: book => dispatch(updateBook(book)),
-    // notify: notification => dispatch(createNotification(notification)),
+    notify: notification => dispatch(showNotification(notification)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(BookEdit));

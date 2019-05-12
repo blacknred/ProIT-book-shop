@@ -18,7 +18,7 @@ class Notification extends React.Component {
 
     render() {
         const { notification, dispatch } = this.props;
-        return !notification ? null : (
+        return notification && (
             <NotificationComponent
                 notification={notification}
                 onClose={() => dispatch(hideNotification())}
