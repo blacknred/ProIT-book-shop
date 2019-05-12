@@ -9,17 +9,19 @@ import {
     TextVariants,
 } from '@patternfly/react-core';
 
-export default ({ text }) => (
+export default ({ text, back = true }) => (
     <Card>
         <CardBody>
             <TextContent>
                 <Text component={TextVariants.h3}>{text}</Text>
             </TextContent>
         </CardBody>
-        <CardBody>
-            <Button variant="secondary" component={Link} to="/books">
-                Back to list
-            </Button>
-        </CardBody>
+        {back && (
+            <CardBody>
+                <Button variant="secondary" component={Link} to="/books">
+                    Back
+                </Button>
+            </CardBody>
+        )}
     </Card>
 );

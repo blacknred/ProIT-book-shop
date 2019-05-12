@@ -1,71 +1,76 @@
 import constants from '../constants';
-import { getBook, putBook } from '../../api';
+import { getBook, putBook, postBook } from '../../api';
 import { showNotification } from './notification';
 
-export const fetchBookBegin = () => ({
-    type: constants.FETCH_BOOK_BEGIN,
+export const processBookBegin = () => ({
+    type: constants.PROCESS_BOOK_BEGIN,
 });
 
-export const fetchBookSuccess = book => ({
-    type: constants.FETCH_BOOK_SUCCESS,
+export const processBookSuccess = book => ({
+    type: constants.PROCESS_BOOK_SUCCESS,
     book,
 });
 
-export const fetchBookFailure = error => ({
-    type: constants.FETCH_BOOK_FAILURE,
-    error,
-});
-
-export const updateBookBegin = () => ({
-    type: constants.UPDATE_BOOK_BEGIN,
-});
-
-export const updateBookSuccess = book => ({
-    type: constants.UPDATE_BOOK_SUCCESS,
-    book,
-});
-
-export const updateBookFailure = error => ({
-    type: constants.UPDATE_BOOK_FAILURE,
+export const processBookFailure = error => ({
+    type: constants.PROCESS_BOOK_FAILURE,
     error,
 });
 
 // action creators
 
 export const fetchBook = id => (dispatch) => {
-    dispatch(fetchBookBegin());
+    dispatch(processBookBegin());
     return getBook(id)
         .then((res) => {
             dispatch(showNotification({
                 text: 'success fetching',
                 variant: 'success',
             }));
-            dispatch(fetchBookSuccess(res));
+            dispatch(processBookSuccess(res));
         })
         .catch((e) => {
             dispatch(showNotification({
                 text: e.message,
                 variant: 'danger',
             }));
-            dispatch(fetchBookFailure(e.message));
+            dispatch(processBookFailure(e.message));
         });
 };
 
 export const updateBook = bookData => (dispatch) => {
-    dispatch(updateBookBegin());
+    dispatch(processBookBegin());
     return putBook(bookData)
         .then((res) => {
             dispatch(showNotification({
                 text: 'success updating',
                 variant: 'success',
             }));
-            dispatch(updateBookSuccess(res));
+            dispatch(processBookSuccess(res));
         })
         .catch((e) => {
             dispatch(showNotification({
                 text: e.message,
                 variant: 'danger',
             }));
-            dispatch(updateBookFailure(e.message));
+            dispatch(processBookFailure(e.message));
+        });
+};
+
+export const addBook = bookData => (dispatch) => {
+    dispatch(processBookBegin());
+    return postBook(bookData)
+        .then((res) => {
+            dispatch(showNotification({
+                text: 'success adding',
+                variant: 'success',
+            }));
+            dispatch(processBookSuccess(res));
+        })
+        .catch((e) => {
+            dispatch(showNotification({
+                text: e.message,
+                variant: 'danger',
+            }));
+            dispatch(processBookFailure(e.message));
         });
 };

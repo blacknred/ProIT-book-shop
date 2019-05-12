@@ -8,21 +8,21 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-    case constants.FETCH_BOOK_BEGIN:
+    case constants.PROCESS_BOOK_BEGIN:
         return {
             ...state,
             loading: true,
             error: null,
         };
 
-    case constants.FETCH_BOOK_SUCCESS:
+    case constants.PROCESS_BOOK_SUCCESS:
         return {
             ...state,
             loading: false,
             book: action.book,
         };
 
-    case constants.FETCH_BOOK_FAILURE:
+    case constants.PROCESS_BOOK_FAILURE:
         return {
             ...state,
             loading: false,

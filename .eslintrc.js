@@ -22,5 +22,6 @@ module.exports = {
         "Audio": 1,
         "File": 1,
         "Blob": 1,
+        "it": 1,
     }
 };

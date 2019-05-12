@@ -3,11 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Loading from '../components/Loader';
-import BookEditComponent from '../components/BookEdit';
 import FailureComponent from '../components/Failure';
-import { addBook } from '../store/actions/books';
-import { fetchBook, updateBook } from '../store/actions/book';
+import BookEditComponent from '../components/BookEdit';
 import { showNotification } from '../store/actions/notification';
+import { fetchBook, updateBook, addBook } from '../store/actions/book';
 
 class BookEdit extends React.Component {
     constructor(props) {
@@ -35,13 +34,15 @@ class BookEdit extends React.Component {
     }
 
     componentWillReceiveProps({ book }) {
-        this.setState({
-            title: book.title,
-            author: book.author,
-            pagesCount: book.pagesCount,
-            isTitleValid: true,
-            isPagesCountValid: true,
-        });
+        if (book) {
+            this.setState({
+                title: book.title,
+                author: book.author,
+                pagesCount: book.pagesCount,
+                isTitleValid: true,
+                isPagesCountValid: true,
+            });
+        }
     }
 
     onChangeTitleHandler(value) {
@@ -97,14 +98,7 @@ class BookEdit extends React.Component {
                 pagesCount,
             });
         }
-        // this.setState({
-        //     title: '',
-        //     author: '',
-        //     pagesCount: '',
-        //     isTitleValid: false,
-        //     isPagesCountValid: false,
-        // });
-        // history.push(`/books/${id}`);
+        history.push(`/books/${id}`);
     }
 
     render() {
@@ -112,24 +106,26 @@ class BookEdit extends React.Component {
         if (loading) {
             return <Loading />;
         }
-        if (error) {
-            return <FailureComponent text={error} />;
-        }
         return (
-            <BookEditComponent
-                {...this.state}
-                onChangeTitle={this.onChangeTitleHandler}
-                onChangeAuthor={this.onChangeAuthorHandler}
-                onChangePagesCount={this.onChangePagesCountHandler}
-                onSubmit={this.onSubmitHandler}
-                onBack={() => history.goBack()}
-            />
+            <>
+                {error && <FailureComponent text={error} back={false} />}
+                <BookEditComponent
+                    {...this.state}
+                    onChangeTitle={this.onChangeTitleHandler}
+                    onChangeAuthor={this.onChangeAuthorHandler}
+                    onChangePagesCount={this.onChangePagesCountHandler}
+                    onSubmit={this.onSubmitHandler}
+                    onBack={() => history.goBack()}
+                />
+            </>
         );
     }
 }
 
 const mapStateToProps = state => ({
     book: state.book.book,
+    loading: state.book.loading,
+    error: state.book.error,
 });
 
 const mapDispatchToProps = dispatch => ({
