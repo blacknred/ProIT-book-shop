@@ -1,12 +1,12 @@
 import React from 'react';
 import { Alert, AlertActionCloseButton } from '@patternfly/react-core';
 
-export default ({ text, variant, remove }) => (
+export default ({ notification, onClose }) => (
     <Alert
-        key={text}
-        variant={variant || 'warning'}
-        title={text || 'Warning alert description'}
-        action={<AlertActionCloseButton onClose={remove} />}
+        key={notification.text}
+        variant={notification.variant || 'warning'}
+        title={notification.text || 'Warning alert description'}
+        action={<AlertActionCloseButton onClose={onClose} />}
         className="container"
     />
 );

@@ -1,5 +1,6 @@
-import constants from '../constants/index';
+import constants from '../constants';
 import { getBook, putBook } from '../../api';
+import { showNotification } from './notification';
 
 export const fetchBookBegin = () => ({
     type: constants.FETCH_BOOK_BEGIN,
@@ -35,11 +36,17 @@ export const fetchBook = id => (dispatch) => {
     dispatch(fetchBookBegin());
     return getBook(id)
         .then((res) => {
-            // dispatch notification
+            dispatch(showNotification({
+                text: 'success fetching',
+                variant: 'success',
+            }));
             dispatch(fetchBookSuccess(res));
         })
         .catch((e) => {
-            // dispatch notification
+            dispatch(showNotification({
+                text: 'error fetching',
+                variant: 'danger',
+            }));
             dispatch(fetchBookFailure(e.message));
         });
 };
@@ -48,11 +55,17 @@ export const updateBook = bookData => (dispatch) => {
     dispatch(updateBookBegin());
     return putBook(bookData)
         .then((res) => {
-            // dispatch notification
+            dispatch(showNotification({
+                text: 'success updating',
+                variant: 'success',
+            }));
             dispatch(updateBookSuccess(res));
         })
         .catch((e) => {
-            // dispatch notification
+            dispatch(showNotification({
+                text: 'error updating',
+                variant: 'danger',
+            }));
             dispatch(updateBookFailure(e.message));
         });
 };

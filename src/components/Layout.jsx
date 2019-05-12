@@ -7,7 +7,7 @@ import {
     PageSectionVariants,
 } from '@patternfly/react-core';
 
-import Notification from '../components/Notification';
+import Notification from '../containers/Notification';
 
 export default ({ children }) => {
     const Header = (
