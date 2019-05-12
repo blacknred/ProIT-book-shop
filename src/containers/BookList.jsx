@@ -15,7 +15,7 @@ class BookList extends React.Component {
                 '#',
                 { title: 'Title', transforms: [sortable] },
                 { title: 'Author', transforms: [sortable] },
-                'PagesCount',
+                'Pages',
             ],
             rows: [],
             sortBy: {},
@@ -41,8 +41,8 @@ class BookList extends React.Component {
     }
 
     onSort(_e, idx, dir) {
-        const { books } = this.props;
-        const sortedRows = books.sort((a, b) => {
+        const { rows } = this.state;
+        const sortedRows = rows.sort((a, b) => {
             if (a[idx] < b[idx]) return -1;
             if (a[idx] > b[idx]) return 1;
             return 0;
@@ -67,7 +67,6 @@ class BookList extends React.Component {
         return (
             <BookListComponent
                 {...this.state}
-                // rows={books.map(book => Object.values(book))}
                 onRowClick={this.onRowClickHandler}
                 onSort={this.onSort}
             />

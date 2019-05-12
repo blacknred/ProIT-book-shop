@@ -24,7 +24,7 @@ export default ({
                     label="Book title"
                     isRequired
                     fieldId="title"
-                    helperTextInvalid="Please provide book title"
+                    helperTextInvalid="Please provide unique book title"
                     isValid={isTitleValid}
                 >
                     <TextInput

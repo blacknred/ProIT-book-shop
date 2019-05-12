@@ -34,18 +34,35 @@ export default ({ book }) => (
                 <CardHeader>About the book</CardHeader>
                 <CardBody>
                     <TextContent>
-                        <Text component={TextVariants.h1}>{book.title}</Text>
+                        <Split gutter="md">
+                            <SplitItem>
+                                <Text component={TextVariants.h3}><strong>Title</strong></Text>
+                            </SplitItem>
+                            <SplitItem isFilled>
+                                <Text component={TextVariants.h1}>{book.title}</Text>
+                            </SplitItem>
+                        </Split>
                     </TextContent>
                 </CardBody>
                 <CardBody>
-                    <TextContent>
-                        <Text component={TextVariants.h1}>{book.author}</Text>
-                    </TextContent>
+                    <Split gutter="md">
+                        <SplitItem>
+                            <Text component={TextVariants.h3}><strong>Author</strong></Text>
+                        </SplitItem>
+                        <SplitItem isFilled>
+                            <Text component={TextVariants.h1}>{book.author}</Text>
+                        </SplitItem>
+                    </Split>
                 </CardBody>
                 <CardBody>
-                    <TextContent>
-                        <Text component={TextVariants.h1}>{book.pagesCount}</Text>
-                    </TextContent>
+                    <Split gutter="md">
+                        <SplitItem>
+                            <Text component={TextVariants.h3}><strong>Pages count</strong></Text>
+                        </SplitItem>
+                        <SplitItem isFilled>
+                            <Text component={TextVariants.h1}>{book.pagesCount}</Text>
+                        </SplitItem>
+                    </Split>
                 </CardBody>
                 <CardFooter>
                     <ActionGroup>
@@ -61,8 +78,6 @@ export default ({ book }) => (
                                 </Button>
                             </SplitItem>
                         </Split>
-
-
                     </ActionGroup>
                 </CardFooter>
             </>

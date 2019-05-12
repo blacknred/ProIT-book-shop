@@ -18,6 +18,7 @@ class BookEdit extends React.Component {
             pagesCount: '',
             isTitleValid: false,
             isPagesCountValid: false,
+            isValidationError: false,
         };
         this.onChangeTitleHandler = this.onChangeTitleHandler.bind(this);
         this.onChangeAuthorHandler = this.onChangeAuthorHandler.bind(this);
@@ -37,11 +38,12 @@ class BookEdit extends React.Component {
             title: book.title,
             author: book.author,
             pagesCount: book.pagesCount,
+            isTitleValid: true,
+            isPagesCountValid: true,
         });
     }
 
     onChangeTitleHandler(value) {
-        const { titles } = this.props;
         this.setState({
             title: value,
             isTitleValid: true, // !(titles.inclides(value)),
@@ -64,20 +66,17 @@ class BookEdit extends React.Component {
     onSubmitHandler(e) {
         e.preventDefault();
         const {
-            history, book, add, update, notify, titles,
+            history, book, add, update, notify,
         } = this.props;
         const {
             title, author, pagesCount, isTitleValid, isPagesCountValid, isEdit,
         } = this.state;
         if (!isTitleValid || !isPagesCountValid) {
-            // notify({
-            //     text: 'Invalid book data',
-            //     status: 'warning',
-            // });
+            this.setState({ isValidationError: true });
             console.log('kk', isTitleValid, isPagesCountValid);
             return;
         }
-        const id = Date.now(); // book ? book.id :
+        const id = isEdit ? book.id : Date.now();
         if (isEdit) {
             update({
                 ...book,
@@ -104,6 +103,7 @@ class BookEdit extends React.Component {
         const {
             history, error, book, loading,
         } = this.props;
+        const { isValidationError } = this.state;
         if (loading) {
             return <Loading />;
         }
@@ -111,21 +111,23 @@ class BookEdit extends React.Component {
             return <Notification text={error.message} variant="danger" />;
         }
         return (
-            <BookEditComponent
-                {...this.state}
-                onChangeTitle={this.onChangeTitleHandler}
-                onChangeAuthor={this.onChangeAuthorHandler}
-                onChangePagesCount={this.onChangePagesCountHandler}
-                onSubmit={this.onSubmitHandler}
-                onBack={() => history.goBack()}
-            />
+            <>
+                <BookEditComponent
+                    {...this.state}
+                    onChangeTitle={this.onChangeTitleHandler}
+                    onChangeAuthor={this.onChangeAuthorHandler}
+                    onChangePagesCount={this.onChangePagesCountHandler}
+                    onSubmit={this.onSubmitHandler}
+                    onBack={() => history.goBack()}
+                />
+                {isValidationError && <Notification text="Validation Errors" variant="danger" />}
+            </>
         );
     }
 }
 
 const mapStateToProps = state => ({
     book: state.book.book,
-    // titles: state.books.map(book => book.title),
 });
 
 const mapDispatchToProps = dispatch => ({

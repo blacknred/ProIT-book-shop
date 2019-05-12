@@ -36,7 +36,6 @@ export const fetchBooks = () => (dispatch) => {
     return getBooks()
         .then((res) => {
             dispatch(fetchBooksSuccess(res));
-            return res;
         })
         .catch((e) => {
             dispatch(fetchBooksFailure(e));
@@ -48,7 +47,6 @@ export const addBook = bookData => (dispatch) => {
     return postBook(bookData)
         .then((res) => {
             dispatch(addBookSuccess(res));
-            return res;
         })
         .catch((e) => {
             dispatch(addBookFailure(e));
