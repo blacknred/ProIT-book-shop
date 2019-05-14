@@ -6,13 +6,11 @@ import {
 } from 'react-router-dom';
 import React, { lazy, Suspense } from 'react';
 
-import Loading from './components/Loader';
+import Loading from './Loader';
 
-const dumbAwait = path => new Promise(resolve => setTimeout(() => resolve(path, 2000)));
-
-const Book = lazy(() => dumbAwait(import('./containers/Book')));
-const BookList = lazy(() => dumbAwait(import('./containers/BookList')));
-const BookEdit = lazy(() => dumbAwait(import('./containers/BookEdit')));
+const Book = lazy(() => import('../containers/Book'));
+const BookList = lazy(() => import('../containers/BookList'));
+const BookEdit = lazy(() => import('../containers/BookEdit'));
 
 export default () => (
     <BrowserRouter>

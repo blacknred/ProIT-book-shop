@@ -16,8 +16,6 @@ export const fetchBooksFailure = error => ({
     error,
 });
 
-// action creators
-
 export const fetchBooks = () => (dispatch) => {
     dispatch(fetchBooksBegin());
     return getBooks()

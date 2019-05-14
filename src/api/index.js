@@ -28,7 +28,7 @@ export const postBook = book => new Promise((resolve, reject) => setTimeout(() =
         return reject(new Error('Title have to be unique'));
     }
     localStorage.setItem('books', JSON.stringify(books.concat(book)));
-    return resolve(book);
+    return resolve(book.id);
 }, 500));
 
 export const putBook = book => new Promise(resolve => setTimeout(() => {
@@ -39,5 +39,5 @@ export const putBook = book => new Promise(resolve => setTimeout(() => {
         return b;
     });
     localStorage.setItem('books', JSON.stringify(updatedBooks));
-    return resolve(book);
+    return resolve(book.id);
 }, 500));

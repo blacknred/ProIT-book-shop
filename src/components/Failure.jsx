@@ -19,7 +19,7 @@ export default ({ text, back = true }) => (
         {back && (
             <CardBody>
                 <Button variant="secondary" component={Link} to="/books">
-                    Back
+                    Back to list
                 </Button>
             </CardBody>
         )}

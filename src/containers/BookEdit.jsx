@@ -5,17 +5,17 @@ import { connect } from 'react-redux';
 import Loading from '../components/Loader';
 import FailureComponent from '../components/Failure';
 import BookEditComponent from '../components/BookEdit';
+import { update, add } from '../store/actions/mutation';
 import { showNotification } from '../store/actions/notification';
-import { fetchBook, updateBook, addBook } from '../store/actions/book';
 
 class BookEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isEdit: false,
             title: '',
             author: '',
             pagesCount: '',
+            isEdit: false,
             isTitleValid: false,
             isPagesCountValid: false,
         };
@@ -26,22 +26,20 @@ class BookEdit extends React.Component {
     }
 
     async componentDidMount() {
-        const { match: { params: { bookId } }, fetching } = this.props;
-        if (bookId) {
-            this.setState({ isEdit: true });
-            await fetching(bookId);
-        }
-    }
-
-    componentWillReceiveProps({ book }) {
+        const { book } = this.props;
         if (book) {
             this.setState({
-                title: book.title,
-                author: book.author,
-                pagesCount: book.pagesCount,
+                ...book,
+                isEdit: true,
                 isTitleValid: true,
                 isPagesCountValid: true,
             });
+        }
+    }
+
+    componentWillReceiveProps({ id, history }) {
+        if (id) {
+            history.push(`/books/${id}`);
         }
     }
 
@@ -68,7 +66,7 @@ class BookEdit extends React.Component {
     async onSubmitHandler(e) {
         e.preventDefault();
         const {
-            history, book, add, update, notify,
+            book, addBook, updateBook, notify,
         } = this.props;
         const {
             title, author, pagesCount, isTitleValid, isPagesCountValid, isEdit,
@@ -82,23 +80,21 @@ class BookEdit extends React.Component {
             });
             return;
         }
-        const id = isEdit ? book.id : Date.now();
         if (isEdit) {
-            await update({
+            await updateBook({
                 ...book,
                 title,
                 author,
                 pagesCount,
             });
         } else {
-            await add({
-                id,
+            await addBook({
+                id: Date.now(),
                 title,
                 author,
                 pagesCount,
             });
         }
-        history.push(`/books/${id}`);
     }
 
     render() {
@@ -122,16 +118,16 @@ class BookEdit extends React.Component {
     }
 }
 
-const mapStateToProps = state => ({
-    book: state.book.book,
-    loading: state.book.loading,
-    error: state.book.error,
+const mapStateToProps = (state, ownProps) => ({
+    id: state.mutation.id,
+    loading: state.mutation.loading,
+    error: state.mutation.error,
+    book: ownProps.match.params.bookId ? state.book.book : null,
 });
 
 const mapDispatchToProps = dispatch => ({
-    fetching: id => dispatch(fetchBook(id)),
-    add: book => dispatch(addBook(book)),
-    update: book => dispatch(updateBook(book)),
+    addBook: book => dispatch(add(book)),
+    updateBook: book => dispatch(update(book)),
     notify: notification => dispatch(showNotification(notification)),
 });
 

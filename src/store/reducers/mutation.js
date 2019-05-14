@@ -1,34 +1,34 @@
 import constants from '../constants';
 
 const initialState = {
-    book: null,
+    id: null,
     loading: false,
     error: null,
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-    case constants.FETCH_BOOK_BEGIN:
+    case constants.MUTATION_BEGIN:
         return {
             ...state,
             loading: true,
             error: null,
-            book: null,
+            id: null,
         };
 
-    case constants.FETCH_BOOK_SUCCESS:
+    case constants.MUTATION_SUCCESS:
         return {
             ...state,
             loading: false,
-            book: action.book,
+            id: action.id,
         };
 
-    case constants.FETCH_BOOK_FAILURE:
+    case constants.MUTATION_FAILURE:
         return {
             ...state,
             loading: false,
             error: action.error,
-            book: null,
+            id: null,
         };
 
     default:
